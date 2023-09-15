@@ -1,25 +1,34 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect, useLayoutEffect } from 'react';
+import { Routes, Route, BrowserRouter } from 'react-router-dom';
+import './assets/css/index.css';
+import MainLayOut from './views/layouts/MainLayout';
+import BookMain from './views/layouts/BookMain';
+import { useCookies } from 'react-cookie';
+import { useUserStore } from './stores';
 
 function App() {
+  const [cookies, setCookies] = useCookies();
+  const { user, setUser } = useUserStore();
+
+  useLayoutEffect(() => {
+    if (cookies.token) {
+      let user = localStorage.getItem('userStore') as string;
+      if (user) {
+        setUser(JSON.parse(JSON.parse(user).state.user));
+      }
+    } else {
+      localStorage.removeItem('userStore');
+    }
+  }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path='/' element={<MainLayOut />} />
+        {/* <Route path='/login' element={<Login />} />
+        <Route path='/join' element={<Join />} /> */}
+      </Routes>
+    </BrowserRouter>
   );
 }
 
