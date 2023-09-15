@@ -137,7 +137,7 @@ export default function BookList() {
     const selectedRowsData = ids.map((id: number) => bookList.find((row: any) => row.bookNo === id));
     if (selectedRowsData.length > 0) {
       setSelectedRow(selectedRowsData[0]);
-      setBookImgBase64(selectedRowsData[0] ? `${BASE_URL}${selectedRowsData[0].filePath}` : '');
+      setBookImgBase64(selectedRowsData[0].fileImage);
       setBookImg('');
     }
   };
@@ -164,11 +164,10 @@ export default function BookList() {
       setBookLocation(selectedRow.bookLocation);
       let path = '';
       if (selectedRow.filePath) {
-        path = selectedRow.filePath.includes('/outputs') ? `${BASE_URL}${selectedRow.filePath}` : selectedRow.filePath;
+        path = selectedRow.fileImage;
       }
       setBookImgBase64(path as any);
       setBookImg('');
-      console.log(bookImgBase64);
     } else {
       setBookTitle('');
       setBookAuthor('');
@@ -191,6 +190,7 @@ export default function BookList() {
 
       const formData = new FormData();
       formData.append('file', bookImg);
+      formData.append('fileImage', bookImgBase64 as any);
       formData.append('bookTitle', bookTitle as any);
       formData.append('bookAuthor', bookAuthor as any);
       formData.append('bookPublish', bookPublish as any);
