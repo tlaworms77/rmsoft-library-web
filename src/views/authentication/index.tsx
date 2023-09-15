@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import Join from './join';
 import { Box, Typography } from '@mui/material';
 import Login from './login';
-// import image from '../../assets/images/main.jpg';
 import image from '../../assets/images/conifers.jpg';
 
 export interface AuthViewProps {

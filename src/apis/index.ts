@@ -14,27 +14,28 @@ import {
 //쿠키 값 가져오는 함수
 function get_cookie(name = 'token') {
   var value = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
-  console.log(value);
   return value ? value[2] : null;
 }
 
-const AuthorizationJWT = {
+const AuthorizationJWT = () => ({
   Authorization: `Bearer ${get_cookie()}`,
-};
-
-const client = axios.create({
-  baseURL: BASE_URL,
-  headers: { ...AuthorizationJWT },
 });
 
-const clientMultipart = axios.create({
-  baseURL: BASE_URL,
-  headers: { ...AuthorizationJWT, ContentType: 'multipart/form-data;' },
-});
+const client = () =>
+  axios.create({
+    baseURL: BASE_URL,
+    headers: { ...AuthorizationJWT() },
+  });
+
+const clientMultipart = () =>
+  axios.create({
+    baseURL: BASE_URL,
+    headers: { ...AuthorizationJWT(), ContentType: 'multipart/form-data;' },
+  });
 
 export const callApiBookList = async (params?: any) => {
   try {
-    const response = await client.get(LIST_BOOK_URL, params);
+    const response = await client().get(LIST_BOOK_URL, params);
     return response.data;
   } catch (error) {
     console.error('loginApi Error: ', error);
@@ -44,7 +45,7 @@ export const callApiBookList = async (params?: any) => {
 
 export const callApiAddBook = async (params: any) => {
   try {
-    const response = await clientMultipart.post(ADD_BOOK_URL, params);
+    const response = await clientMultipart().post(ADD_BOOK_URL, params);
     return response.data;
   } catch (error) {
     console.error('loginApi Error: ', error);
@@ -54,7 +55,7 @@ export const callApiAddBook = async (params: any) => {
 
 export const callApiUpdateBook = async (params: any) => {
   try {
-    const response = await clientMultipart.post(UPDATE_BOOK_URL, params);
+    const response = await clientMultipart().post(UPDATE_BOOK_URL, params);
     return response.data;
   } catch (error) {
     console.error('loginApi Error: ', error);
@@ -64,7 +65,7 @@ export const callApiUpdateBook = async (params: any) => {
 
 export const callApiBorrowBookList = async (params: any) => {
   try {
-    const response = await client.post(BORROW_LIST_URL, params);
+    const response = await client().post(BORROW_LIST_URL, params);
     return response.data;
   } catch (error) {
     console.error('loginApi Error: ', error);
@@ -73,7 +74,7 @@ export const callApiBorrowBookList = async (params: any) => {
 };
 export const callApiBorrowBook = async (params: any) => {
   try {
-    const response = await client.post(BORROW_URL, params);
+    const response = await client().post(BORROW_URL, params);
     return response.data;
   } catch (error) {
     console.error('loginApi Error: ', error);
@@ -82,7 +83,7 @@ export const callApiBorrowBook = async (params: any) => {
 };
 export const callApiReturnBook = async (params: any) => {
   try {
-    const response = await client.post(RETURN_URL, params);
+    const response = await client().post(RETURN_URL, params);
     return response.data;
   } catch (error) {
     console.error('loginApi Error: ', error);
@@ -92,7 +93,7 @@ export const callApiReturnBook = async (params: any) => {
 
 export const loginApi = async (params: any) => {
   try {
-    const response = await client.post(LOGIN_URL, params);
+    const response = await client().post(LOGIN_URL, params);
     return response.data;
   } catch (error) {
     console.error('loginApi Error: ', error);
@@ -102,7 +103,7 @@ export const loginApi = async (params: any) => {
 
 export const joinApi = async (params: any) => {
   try {
-    const response = await client.post(JOIN_URL, params);
+    const response = await client().post(JOIN_URL, params);
     return response.data;
   } catch (error) {
     console.error('joinApi Error: ', error);

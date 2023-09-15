@@ -1,8 +1,7 @@
-import React, { useEffect, useLayoutEffect } from 'react';
+import React, { useLayoutEffect } from 'react';
 import { Routes, Route, BrowserRouter } from 'react-router-dom';
 import './assets/css/index.css';
 import MainLayOut from './views/layouts/MainLayout';
-import BookMain from './views/layouts/BookMain';
 import { useCookies } from 'react-cookie';
 import { useUserStore } from './stores';
 

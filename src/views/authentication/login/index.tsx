@@ -1,14 +1,11 @@
 import { Alert, AlertColor, Box, Button, Card, Snackbar, TextField, Typography } from '@mui/material';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useCookies } from 'react-cookie';
-import { useNavigate } from 'react-router-dom';
 import { useUserStore } from '../../../stores';
 import { AuthViewProps } from '..';
 import { loginApi } from '../../../apis';
 
 export default function Login({ setAuthView }: AuthViewProps) {
-  const navigage = useNavigate();
-
   const [userId, setUserId] = useState('');
   const [userPassword, setUserPassword] = useState('');
 
