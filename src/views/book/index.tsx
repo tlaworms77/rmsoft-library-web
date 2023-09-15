@@ -15,46 +15,53 @@ import {
 import { BASE_URL } from '../../constants';
 
 const columns: GridColDef[] = [
-  { field: 'bookNo', headerName: '도서번호', width: 80 },
+  { field: 'bookNo', headerName: '도서번호', width: 80, headerAlign: 'center', align: 'center' },
   {
     field: 'bookTitle',
     headerName: '도서제목',
-    width: 150,
+    width: 240,
     // editable: true,
   },
   {
     field: 'bookAuthor',
     headerName: '저자',
-    width: 100,
+    width: 180,
     // editable: true,
   },
   {
     field: 'bookPublish',
     headerName: '출판사',
-    width: 110,
+    width: 160,
     // editable: true,
   },
   {
     field: 'bookPublishDt',
     headerName: '출판일',
-    width: 80,
+    width: 100,
+    headerAlign: 'center',
+    align: 'center',
   },
   {
     field: 'bookPrice',
     headerName: '가격',
     type: 'number',
+    headerAlign: 'center',
     width: 80,
   },
   {
     field: 'bookLocation',
     headerName: '도서위치',
     type: 'number',
+    headerAlign: 'center',
+    align: 'center',
     width: 80,
   },
   {
     field: 'borrowYn',
     headerName: '대출가능유무',
     type: 'number',
+    headerAlign: 'center',
+    align: 'center',
     width: 100,
   },
 ];
@@ -68,7 +75,7 @@ const borrowListColumns: GridColDef[] = [
     field: 'borrowDt',
     headerName: '대출일자',
     width: 100,
-    valueFormatter: ({ value }) => StringToDate(new Date(value)),
+    valueFormatter: ({ value }) => (value ? StringToDate(new Date(value)) : ''),
   },
   {
     field: 'returnDt',
@@ -402,16 +409,25 @@ export default function BookList() {
         aria-labelledby='parent-modal-title'
         aria-describedby='parent-modal-description'
       >
-        <Box sx={{ width: 1200, height: 600, margin: 15, background: 'white', position: 'relative' }}>
-          <Box
-            sx={{ position: 'absolute', width: 1000, height: 460, top: '10%', left: '10%', margin: '-25px 0 0 -25px' }}
-          >
+        <Box
+          sx={{
+            borderRadius: 10,
+            width: 900,
+            height: 550,
+            margin: 15,
+            background: 'white',
+            position: 'relative',
+            left: '8%',
+            bottom: '5%',
+          }}
+        >
+          <Box sx={{ position: 'absolute', width: 800, height: 460, top: '7%', left: '8%', margin: '-25px 0 0 -25px' }}>
             <h2 id='parent-modal-title'>{mode === 'add' ? <>도서 등록</> : <>도서 수정</>}</h2>
-            <div style={{ display: 'flex' }}>
-              <div style={{ flex: 1, border: 'solid 1px black', marginRight: '40px', padding: '10px' }}>
-                <img src={bookImgBase64} width={'469px'} height={'350px'} alt='도서이미지' />
+            <div style={{ display: 'flex', border: 'solid 1px gray', padding: '10px' }}>
+              <div style={{ flex: 1, width: '300px', border: 'solid 1px black', marginRight: '40px', padding: '10px' }}>
+                <img src={bookImgBase64} width={'250px'} height={'350px'} alt='도서이미지' />
               </div>
-              <div style={{ flex: 1.5 }}>
+              <div style={{ flex: 2 }}>
                 <TextField
                   fullWidth
                   required
@@ -489,7 +505,16 @@ export default function BookList() {
         aria-labelledby='parent-modal-title'
         aria-describedby='parent-modal-description'
       >
-        <Box sx={{ width: 300, height: 200, margin: 25, background: 'white', position: 'relative', left: '20%' }}>
+        <Box
+          sx={{
+            width: 300,
+            height: 200,
+            margin: 25,
+            background: 'white',
+            position: 'relative',
+            left: '20%',
+          }}
+        >
           <Box
             sx={{ position: 'absolute', width: 250, height: 250, top: '10%', left: '10%', margin: '-10px 0 0 -10px' }}
           >
