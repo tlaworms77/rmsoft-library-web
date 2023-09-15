@@ -1,12 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { Alert, AlertColor, Box, Button, Modal, Snackbar, Stack, TextField, Typography } from '@mui/material';
-import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
-import image from '../../assets/images/conifers.jpg';
+import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import axios from 'axios';
 import { useCookies } from 'react-cookie';
 import { useUserStore } from '../../stores';
-import multer from 'multer';
-import moment from 'moment';
+import {
+  callApiAddBook,
+  callApiBookList,
+  callApiBorrowBook,
+  callApiBorrowBookList,
+  callApiReturnBook,
+  callApiUpdateBook,
+} from '../../apis';
+import { BASE_URL } from '../../constants';
 
 const columns: GridColDef[] = [
   { field: 'bookNo', headerName: '도서번호', width: 80 },
@@ -108,24 +114,17 @@ export default function BookList() {
   const [borrowList, setBorrowList] = useState([]);
 
   useEffect(() => {
-    callApiBookList();
+    readBookList();
   }, []);
 
-  const callApiBookList = async () => {
+  const readBookList = async () => {
     try {
       if (!cookies.token) {
         setUser(null);
       }
 
-      const requestOptions = {
-        headers: {
-          Authorization: `Bearer ${cookies.token}`,
-        },
-      };
-
-      const res = await axios.get('http://localhost:4040/api/book/list', requestOptions);
-
-      setBookList(res.data.data);
+      const res = await callApiBookList();
+      setBookList(res.data);
     } catch (error) {
       if (axios.isAxiosError(error)) {
         console.error(error);
@@ -138,14 +137,14 @@ export default function BookList() {
     const selectedRowsData = ids.map((id: number) => bookList.find((row: any) => row.bookNo === id));
     if (selectedRowsData.length > 0) {
       setSelectedRow(selectedRowsData[0]);
-      setBookImgBase64(selectedRowsData[0] ? `http://localhost:4040${selectedRowsData[0].filePath}` : '');
+      setBookImgBase64(selectedRowsData[0] ? `${BASE_URL}${selectedRowsData[0].filePath}` : '');
       setBookImg('');
     }
   };
   const handleSearch = async () => {
     setBookList([]);
     setSelectedRow({});
-    await callApiBookList();
+    await readBookList();
   };
 
   const handleOpenAddBook = (mode: string) => {
@@ -165,9 +164,7 @@ export default function BookList() {
       setBookLocation(selectedRow.bookLocation);
       let path = '';
       if (selectedRow.filePath) {
-        path = selectedRow.filePath.includes('/outputs')
-          ? `http://localhost:4040${selectedRow.filePath}`
-          : selectedRow.filePath;
+        path = selectedRow.filePath.includes('/outputs') ? `${BASE_URL}${selectedRow.filePath}` : selectedRow.filePath;
       }
       setBookImgBase64(path as any);
       setBookImg('');
@@ -191,12 +188,6 @@ export default function BookList() {
   const handleAddBook = async () => {
     try {
       if (!cookies.token) return;
-      const requestOptions = {
-        headers: {
-          ContentType: 'multipart/form-data;',
-          Authorization: `Bearer ${cookies.token}`,
-        },
-      };
 
       const formData = new FormData();
       formData.append('file', bookImg);
@@ -211,15 +202,15 @@ export default function BookList() {
         formData.append('borrowYn', selectedRow.borrowYn as any);
       }
 
-      let url = mode === 'add' ? 'http://localhost:4040/api/book/add' : 'http://localhost:4040/api/book/update';
-      const res = await axios.post(url, formData, requestOptions);
-      const { data, result, message } = res.data;
+      const res = mode === 'add' ? await callApiAddBook(formData) : await callApiUpdateBook(formData);
+      const { data, result, message } = res;
+
       if (!result) {
         showSnackBar(message, 'error');
         return;
       }
 
-      callApiBookList();
+      readBookList();
 
       handleCloseAddBook();
     } catch (error) {
@@ -245,18 +236,9 @@ export default function BookList() {
         return;
       }
 
-      const requestOptions = {
-        headers: {
-          Authorization: `Bearer ${cookies.token}`,
-        },
-      };
-
-      const params = {
-        bookNo: selectedRow.bookNo,
-      };
-      let url = 'http://localhost:4040/api/book/borrowList';
-      const res = await axios.post(url, params, requestOptions);
-      const { data, result, message } = res.data;
+      const params = { bookNo: selectedRow.bookNo };
+      const res = await callApiBorrowBookList(params);
+      const { data, result, message } = res;
       if (!result) {
         showSnackBar(message, 'error');
         return;
@@ -290,19 +272,12 @@ export default function BookList() {
         return;
       }
 
-      const requestOptions = {
-        headers: {
-          Authorization: `Bearer ${cookies.token}`,
-        },
-      };
-
       const params = {
         bookNo: selectedRow.bookNo,
         userId: borrowUserId,
       };
-      let url = 'http://localhost:4040/api/book/borrow';
-      const res = await axios.post(url, params, requestOptions);
-      const { data, result, message } = res.data;
+      const res = await callApiBorrowBook(params);
+      const { data, result, message } = res;
       if (!result) {
         showSnackBar(message, 'error');
         return;
@@ -331,19 +306,13 @@ export default function BookList() {
         return;
       }
 
-      const requestOptions = {
-        headers: {
-          Authorization: `Bearer ${cookies.token}`,
-        },
-      };
-
       const params = {
         bookNo: selectedRow.bookNo,
         userId: borrowUserId,
       };
-      let url = 'http://localhost:4040/api/book/return';
-      const res = await axios.post(url, params, requestOptions);
-      const { data, result, message } = res.data;
+
+      const res = await callApiReturnBook(params);
+      const { data, result, message } = res;
       if (!result) {
         showSnackBar(message, 'error');
         return;
