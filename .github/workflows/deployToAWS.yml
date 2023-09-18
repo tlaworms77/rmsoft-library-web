@@ -24,7 +24,7 @@ jobs:
       - name: executing remote ssh commands using password
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
         uses: appleboy/ssh-action@master
-        with:
+        with: 
           host: ${{ secrets.AWS_HOST }}
           username: ${{ secrets.AWS_USERNAME }}
           key: ${{ secrets.AWS_KEY }}
