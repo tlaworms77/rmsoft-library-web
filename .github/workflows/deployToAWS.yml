@@ -34,4 +34,3 @@ jobs:
             echo "Test 출력입니다!"
             pwd
             ls
-            whoiam
