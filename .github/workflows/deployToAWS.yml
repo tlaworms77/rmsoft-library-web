@@ -23,7 +23,7 @@ jobs:
     steps:
       - name: executing remote ssh commands using password
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-        uses: actions/checkout@v3.3.0
+        uses: appleboy/ssh-action@v0.1.4
         with:
           host: ${{ secrets.AWS_HOST }}
           username: ${{ secrets.AWS_USERNAME }}
