@@ -31,6 +31,7 @@ jobs:
           port: ${{ secrets.AWS_PORT }}
           # script_stop: true
           script: |
-            echo "Test 출력입니다!"
-            pwd
             ls
+            cd rmsoft-library-web/
+            pwd
+            git pull
