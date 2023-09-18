@@ -29,7 +29,7 @@ jobs:
           username: ${{ secrets.AWS_USERNAME }}
           key: ${{ secrets.AWS_KEY }}
           port: ${{ secrets.AWS_PORT }}
-          script_stop: true
+          # script_stop: true
           script: |
             whoami
             ls -al
