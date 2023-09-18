@@ -1,23 +1,35 @@
-name: Deploy
+# This is a basic workflow to help you get started with Actions
 
+name: deploy
+
+# Controls when the workflow will run
 on:
+  # Triggers the workflow on push or pull request events but only for the main branch
   push:
-    branches: [ main ]
+    branches:
+      - main
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
 
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  Deploy:
-    name: Deploy to EC2
+  # This workflow contains a single job called "build"
+  build:
+    name: Build
+    # The type of runner that the job will run on
     runs-on: ubuntu-latest
-    
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      - uses: actions/checkout@v3.3.0
-      - name: Build & Deploy
-        env:
-            PRIVATE_KEY: ${{ secrets.AWS_KEY }}
-            HOSTNAME: ${{secrets.AWS_HOST}}
-            USER_NAME: ${{secrets.AWS_USERNAME}}
-      
-        run: |
-          echo "$AWS_KEY" > private_key && chmod 600 private_key
-          ssh -o StrictHostKeyChecking=no -i private_key ${AWS_USERNAME}@${AWS_HOST} '
-          ls
+      - name: executing remote ssh commands using password
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+        uses: actions/checkout@v3.3.0
+        with:
+          host: ${{ secrets.AWS_HOST }}
+          username: ${{ secrets.AWS_USERNAME }}
+          key: ${{ secrets.AWS_KEY }}
+          port: ${{ secrets.AWS_PORT }}
+          script_stop: true
+          script: |
+            whoami
+            ls -al
