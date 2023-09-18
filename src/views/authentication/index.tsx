@@ -23,7 +23,7 @@ export default function Authentication() {
           <Box flex={1} display='flex' justifyContent={'center'} alignItems={'center'} flexDirection={'column'}>
             <Box>
               <Typography fontWeight={600} variant='h1' color={'white'}>
-                도서관리 시스템
+                도서관리 시스템2
               </Typography>
             </Box>
             <Box marginBottom={50}>

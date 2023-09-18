@@ -2,7 +2,7 @@ name: Deploy
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   Deploy:
@@ -10,27 +10,20 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2 
+      - uses: actions/checkout@v2
       - name: Build & Deploy
         env:
-            PRIVATE_KEY: ${{ secrets.AWS_KEY }}
-            HOSTNAME: ${{secrets.AWS_HOST}}
-            USER_NAME: ${{secrets.AWS_USERNAME}}
+          PRIVATE_KEY: ${{ secrets.AWS_KEY }}
+          HOSTNAME: ${{secrets.AWS_HOST}}
+          USER_NAME: ${{secrets.AWS_USERNAME}}
 
         run: |
           echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
           ssh -o StrictHostKeyChecking=no -i private_key ${USER_NAME}@${HOSTNAME} '
-              pwd
-              ls
-              whoami
+              
               # Now we have got the access of EC2 and we will start the deploy .
-              # cd /home/ubuntu/<PROJECT_DIRECTORY> &&
-              # git checkout dev &&
-              # git fetch --all &&
-              # git reset --hard origin/dev &&
-              # git pull origin dev &&
-              # sudo npm i &&
-              # sudo npm run build &&
-              # sudo pm2 stop ./dist/index.js &&
-              # sudo pm2 start ./dist/index.js
+              cd rmsoft-library-web/ && 
+              git pull &&
+              pm2 kill &&
+              pm2 serve build 3000
               '
