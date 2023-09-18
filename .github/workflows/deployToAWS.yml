@@ -31,5 +31,4 @@ jobs:
           port: ${{ secrets.AWS_PORT }}
           # script_stop: true
           script: |
-            whoami
-            ls -al
+            echo "Test 출력입니다!"
