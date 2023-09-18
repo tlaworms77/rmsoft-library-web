@@ -23,7 +23,7 @@ jobs:
     steps:
       - name: executing remote ssh commands using password
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-        uses: rmsoft-ec2-web01/ssh-action@master
+        uses: tlaworms77/ssh-action@master
         with:
           host: ${{ secrets.AWS_HOST }}
           username: ${{ secrets.AWS_USERNAME }}
