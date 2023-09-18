@@ -32,3 +32,6 @@ jobs:
           # script_stop: true
           script: |
             echo "Test 출력입니다!"
+            pwd
+            ls
+            whoiam
