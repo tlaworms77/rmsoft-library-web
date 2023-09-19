@@ -1,5 +1,5 @@
 // 상수들
-export const BASE_URL = 'http://13.125.125.51:4040';
+export const BASE_URL = 'http://43.202.4.238:4040';
 // export const BASE_URL = 'http://localhost:4040';
 
 export const LOGIN_URL = `/api/auth/login`;
